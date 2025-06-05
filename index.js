@@ -5,13 +5,13 @@ const app = express();
 const PORT = 8000;
 app.use(express.json());
 
-// Define priority levels (lower number means higher priority)
+// Define priority levels (
 const PRIORITY = { HIGH: 1, MEDIUM: 2, LOW: 3 };
 
-// Store all ingestions and their batches
+let ans=0;
 let allIngestions = {};
 
-// Queue of batches waiting to be processed
+
 let batchQueue = [];
 
 // Endpoint to submit ingestion request
@@ -52,7 +52,7 @@ app.get('/status/:ingestionId', (req, res) => {
 
     const batchStatuses = ingestion.batches.map(batch => batch.status);
 
-    // Determine overall ingestion status based on batch statuses
+    //check status
     let overallStatus = 'yet_to_start';
     if (batchStatuses.every(status => status === 'completed')) {
         overallStatus = 'completed';
@@ -72,7 +72,7 @@ function processBatches() {
     setInterval(() => {
         if (batchQueue.length === 0) return;
 
-        // Sort batches by priority (highest priority first) and then by creation time (oldest first)
+        
         batchQueue.sort((a, b) => {
             if (a.priority !== b.priority) return a.priority - b.priority;
             return a.createdAt - b.createdAt;
@@ -83,16 +83,16 @@ function processBatches() {
 
         console.log(`Processing batch: ${currentBatch.batchId} with IDs ${currentBatch.ids}`);
 
-        // Simulate async processing with a 2-second delay
+        
         setTimeout(() => {
             currentBatch.status = 'completed';
             console.log(`Completed batch: ${currentBatch.batchId}`);
         }, 2000);
 
-    }, 5000); // Runs every 5 seconds to pick next batch
+    }, 5000); //5 second as told
 }
 
-// Start batch processing loop
+
 processBatches();
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
